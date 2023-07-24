@@ -1,0 +1,53 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="post_detail">
+        
+        {% if user.is_authenticated and post.author == user %}
+        <a class="main-btn" href="{% url 'post_edit' pk=post.pk %}">Изменить</a>
+        {% endif %}
+        
+        <h3 class='post-title'>{{ post.title }}</h3>
+        <p class="publish_date">{{ post.published_date }}</p>
+
+        <div class="post-statistic_block">
+            <i class="fad fa-eye"></i>
+            <p>{{ post.count_of_view }}</p>
+            {% if user in post.likes_check.all %}
+                <a href="{% url 'like_post' pk=post.pk %}" class="btn btn-primary"><i class="fas fa-heart"></i></a>
+            {% else %}
+                <a href="{% url 'like_post' pk=post.pk %}" class="btn btn-primary"><i class="far fa-heart"></i></a>
+            {% endif %}
+            <p>{{ post.likes }}</p>
+        </div>
+        <p class="post-text">{{ post.text }}</p>
+
+
+        <div class="post_afterline"></div>
+
+        <form class="comment_form" method="post" action="{% url 'add_comment' pk=post.pk %}">
+            {% csrf_token %}
+            <p class="comment_add">Добавить комментарий:</p>
+            <textarea rows="5" class="post_textarea" name="content"></textarea>
+            <button style="margin-bottom: 50px;" class="comment_submit" type="submit">Добавить коментарий</button>
+        </form>
+        
+        {% for comment in post.comments.all %}
+        <div class="comment_block">
+            <div class="comment_block-user_info">
+                {% if post.author.profile %}
+                    <a class="author_link" href="{% url 'profile_view' pk=post.author.pk %}">@{{ comment.author.username }}</a>
+                {% else %}
+                     <p class="author_link author_link_wwithoutp">@{{ comment.author.username }}</p>
+                {% endif %}
+
+            </div>
+            <p class="comment_text">{{ comment.text }}</p>
+        </div>
+    {% endfor %}
+
+    </div>
+</div>
+{% endblock %}

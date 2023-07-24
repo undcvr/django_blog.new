@@ -1,0 +1,16 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    {% comment %} {% if user.is_authenticated %}
+    <a class="main-btn" href="{% url 'post_edit' pk=post.pk %}">Изменить</span></a>
+    {% endif %} {% endcomment %}
+    <img class='profile_pic' src="{{ profile.profile_pic.url }}" alt="">
+    <h3 class='profile-title'>@{{ profile.user.username }}</h3>
+    <p class='profile-desc'>Имя:<br><span>{{ profile.name }}</span></p>
+    <p class='profile-desc'>Почта:<br><span>{{ profile.email }}</span></p>
+    <p class='profile-desc'>Обо мне:<br><span>{{ profile.bio|linebreaksbr }}</span></p>
+
+</div>
+{% endblock %}
